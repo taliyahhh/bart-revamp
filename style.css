@@ -78,13 +78,13 @@ body[data-view="about"] .topnav, body[data-view="sources"] .topnav { background:
 .line-path { fill: none; stroke-width: 6.5; stroke-linecap: round; stroke-linejoin: round; cursor: pointer; transition: opacity .25s; }
 .station .halo { stroke: var(--halo); stroke-linecap: round; stroke-width: 11; }
 .station .fill { stroke: #fff; stroke-linecap: round; stroke-width: 7; }
-.station .hit { stroke: transparent; stroke-width: 26; stroke-linecap: round; }
+.hit { stroke: transparent; stroke-width: 26; stroke-linecap: round; cursor: pointer; }
 .station.selected .halo { stroke: var(--accent); stroke-width: 15; }
 .station { cursor: pointer; transition: opacity .25s; }
 .station text { font-size: 14.5px; fill: var(--ink); }
 .station text.bold { font-weight: 800; font-size: 17px; }
 .station text.note { font-size: 9px; font-style: italic; font-weight: 700; }
-.station:hover text, .station.selected text { fill: var(--accent); }
+.station:hover text, .station.hover text, .station.selected text { fill: var(--accent); }
 #map.focus .line-path { opacity: .12; }
 #map.focus .line-path.hl { opacity: 1; }
 #map.focus .station { opacity: .25; }
@@ -433,3 +433,6 @@ body, .topnav, .sheet, .zoom, .zoom button, .bottombar, .site-footer, .live-pill
   transition: background-color .8s ease, color .8s ease, border-color .8s ease, fill .8s ease;
 }
 .water, .rail, .region, .station text, .station .halo { transition: fill .8s ease, stroke .8s ease; }
+
+/* Bigger tap targets on touch screens */
+@media (pointer: coarse) { .hit { stroke-width: 36; } .line-path { stroke-width: 7.5; } }

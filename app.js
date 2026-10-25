@@ -68,10 +68,12 @@ function drawBackground() {
     el("text", { class: "region", x, y }).textContent = t;
 }
 
-let layer;
+let layer, hitLayer;
 function drawNetwork() {
   layer?.remove();
+  hitLayer?.remove();
   layer = el("g", { id: "network" });
+  hitLayer = el("g", { id: "station-hits" }); // invisible tap targets kept above the mini trains
   const lines = activeLines();
   const at = {};
 
@@ -91,7 +93,10 @@ function drawNetwork() {
       const d = Math.hypot(p.x - q.x, p.y - q.y);
       if (d > best) { best = d; a = p; b = q; }
     }
-    for (const cls of ["hit", "halo", "fill"]) el("line", { class: cls, x1: a.x, y1: a.y, x2: b.x + 0.01, y2: b.y }, g);
+    for (const cls of ["halo", "fill"]) el("line", { class: cls, x1: a.x, y1: a.y, x2: b.x + 0.01, y2: b.y }, g);
+    const hit = el("line", { class: "hit", x1: a.x, y1: a.y, x2: b.x + 0.01, y2: b.y, "data-id": id }, hitLayer);
+    hit.addEventListener("mouseenter", () => g.classList.add("hover"));
+    hit.addEventListener("mouseleave", () => g.classList.remove("hover"));
 
     const minX = Math.min(a.x, b.x) - 6, maxX = Math.max(a.x, b.x) + 6;
     const minY = Math.min(a.y, b.y) - 6, maxY = Math.max(a.y, b.y) + 6;
@@ -111,24 +116,38 @@ function drawNetwork() {
       const nb = g.querySelector("text").getBBox();
       el("text", { x: nb.x + nb.width + 6, y: y0, class: "note" }, g).textContent = s.note.toUpperCase();
     }
-    g.addEventListener("click", () => selectStation(selected === id ? null : id));
+    hit.addEventListener("click", () => {
+      const pick = selected === id ? null : id;
+      selectStation(pick);
+      if (pick) focusPoint(STATIONS[id]);
+    });
   }
   applyFocus();
 }
 
 // ======================= Pan + zoom (mouse, trackpad, touch) =======================
+// The view always stays inside the map: you can zoom into any part and pan around,
+// but never drag off into empty space.
 const BASE = { x: 50, y: 40, w: 1120, h: 900 };
+const MIN_W = 220; // closest zoom
 let vb = { ...BASE };
 let dragged = false;
 
+function aspect() {
+  const r = svg.getBoundingClientRect();
+  return r.width && r.height ? r.width / r.height : BASE.w / BASE.h;
+}
+const maxW = () => Math.max(BASE.w, BASE.h * aspect()); // whole map visible
+
 function setVB(next) {
-  const w = Math.min(BASE.w, Math.max(240, next.w));
-  const h = w * BASE.h / BASE.w;
-  // keep at least part of the map on screen
-  const x = Math.min(BASE.x + BASE.w - w * 0.3, Math.max(BASE.x - w * 0.7, next.x));
-  const y = Math.min(BASE.y + BASE.h - h * 0.3, Math.max(BASE.y - h * 0.7, next.y));
+  const a = aspect();
+  const w = Math.min(maxW(), Math.max(MIN_W, next.w));
+  const h = w / a;
+  // Center on an axis when the whole map fits; otherwise keep the edges inside the map.
+  const x = w >= BASE.w ? BASE.x + (BASE.w - w) / 2 : Math.min(BASE.x + BASE.w - w, Math.max(BASE.x, next.x));
+  const y = h >= BASE.h ? BASE.y + (BASE.h - h) / 2 : Math.min(BASE.y + BASE.h - h, Math.max(BASE.y, next.y));
   vb = { x, y, w, h };
-  svg.setAttribute("viewBox", `${x} ${y} ${w} ${h}`);
+  svg.setAttribute("viewBox", `${x.toFixed(1)} ${y.toFixed(1)} ${w.toFixed(1)} ${h.toFixed(1)}`);
 }
 function toSvg(cx, cy) {
   const pt = svg.createSVGPoint();
@@ -137,22 +156,55 @@ function toSvg(cx, cy) {
 }
 function zoomAt(k, cx, cy) {
   const p = cx == null ? { x: vb.x + vb.w / 2, y: vb.y + vb.h / 2 } : toSvg(cx, cy);
-  const w = Math.min(BASE.w, Math.max(240, vb.w * k)), r = w / vb.w;
+  const w = Math.min(maxW(), Math.max(MIN_W, vb.w * k)), r = w / vb.w;
   setVB({ x: p.x - (p.x - vb.x) * r, y: p.y - (p.y - vb.y) * r, w });
 }
-function unitsPerPx() {
+function unitsPerPx() { return vb.w / svg.getBoundingClientRect().width; }
+
+// Smoothly glide to a new view (used by buttons, double-tap and tapping a station).
+let anim = null;
+function animateTo(target, ms = 380) {
+  cancelAnimationFrame(anim);
+  const from = { ...vb }, t0 = performance.now();
+  const ease = t => 1 - Math.pow(1 - t, 3);
+  const step = now => {
+    const t = Math.min(1, (now - t0) / ms), k = ease(t);
+    setVB({ x: from.x + (target.x - from.x) * k, y: from.y + (target.y - from.y) * k, w: from.w + (target.w - from.w) * k });
+    if (t < 1) anim = requestAnimationFrame(step);
+  };
+  anim = requestAnimationFrame(step);
+}
+function zoomTo(k, p) {
+  p ||= { x: vb.x + vb.w / 2, y: vb.y + vb.h / 2 };
+  const w = Math.min(maxW(), Math.max(MIN_W, vb.w * k)), r = w / vb.w;
+  animateTo({ x: p.x - (p.x - vb.x) * r, y: p.y - (p.y - vb.y) * r, w });
+}
+// Center a station in the part of the map you can actually see (not behind the panel),
+// zooming in a bit if we're far out.
+function focusPoint(s) {
   const r = svg.getBoundingClientRect();
-  return Math.max(vb.w / r.width, vb.h / r.height);
+  let fx = 0.5, fy = 0.5;
+  if (isSmall() && !sheet.classList.contains("collapsed")) {
+    const sr = sheet.getBoundingClientRect();
+    if (sr.left > r.left + r.width * 0.3) fx = Math.max(0.2, (sr.left - r.left) / r.width / 2); // floating card on the right
+    else fy = Math.max(0.15, (sr.top - r.top) / r.height / 2);                               // bottom sheet
+  }
+  const portrait = aspect() < 0.9;
+  const w = portrait ? Math.min(vb.w, 340) : (vb.w > 640 ? 520 : vb.w);
+  const h = w / aspect();
+  animateTo({ x: s.x - fx * w, y: s.y - fy * h, w });
 }
 
 svg.addEventListener("wheel", e => {
   e.preventDefault();
+  cancelAnimationFrame(anim);
   zoomAt(Math.exp(e.deltaY * (e.ctrlKey ? 0.01 : 0.0015)), e.clientX, e.clientY);
 }, { passive: false });
 
 const pointers = new Map();
-let start = null;
+let start = null, lastTap = { t: 0, x: 0, y: 0 };
 svg.addEventListener("pointerdown", e => {
+  cancelAnimationFrame(anim);
   pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
   dragged = false;
   start = snapshot();
@@ -163,7 +215,7 @@ window.addEventListener("pointermove", e => {
   const now = snapshot();
   if (!start || now.n !== start.n) { start = now; return; }
   const moved = Math.hypot(now.cx - start.cx, now.cy - start.cy);
-  if (!dragged && moved < 6 && Math.abs(now.dist - start.dist) < 6) return;
+  if (!dragged && moved < 8 && Math.abs(now.dist - start.dist) < 8) return;
   if (!dragged) { dragged = true; svg.classList.add("grabbing"); }
   if (now.n >= 2 && start.dist > 0) zoomAt(start.dist / now.dist, now.cx, now.cy);
   const u = unitsPerPx();
@@ -171,7 +223,16 @@ window.addEventListener("pointermove", e => {
   start = now;
 });
 const endPointer = e => {
+  if (!pointers.has(e.pointerId)) return;
   pointers.delete(e.pointerId);
+  // double-tap (or double-click) on empty map zooms in there
+  if (!dragged && !pointers.size && e.type === "pointerup" && !e.target.closest(".station, .line-path, .train")) {
+    const now = performance.now();
+    if (now - lastTap.t < 320 && Math.hypot(e.clientX - lastTap.x, e.clientY - lastTap.y) < 30) {
+      zoomTo(0.5, toSvg(e.clientX, e.clientY));
+      lastTap.t = 0;
+    } else lastTap = { t: now, x: e.clientX, y: e.clientY };
+  }
   start = pointers.size ? snapshot() : null;
   if (!pointers.size) svg.classList.remove("grabbing");
 };
@@ -188,19 +249,28 @@ function snapshot() {
 svg.addEventListener("click", e => { if (dragged) { e.stopPropagation(); e.preventDefault(); dragged = false; } }, true);
 
 document.querySelectorAll("[data-zoom]").forEach(b => b.onclick = () => {
-  if (b.dataset.zoom === "in") zoomAt(0.7);
-  else if (b.dataset.zoom === "out") zoomAt(1 / 0.7);
-  else fitView();
+  if (b.dataset.zoom === "in") zoomTo(0.6);
+  else if (b.dataset.zoom === "out") zoomTo(1 / 0.6);
+  else fitView(true);
+});
+// Keyboard: + / - to zoom, 0 to reset, arrows to pan (map tab only).
+addEventListener("keydown", e => {
+  if (document.body.dataset.view !== "map" || e.target.closest("input, select, textarea")) return;
+  const step = vb.w * 0.15;
+  const moves = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step] };
+  if (e.key === "+" || e.key === "=") zoomTo(0.6);
+  else if (e.key === "-" || e.key === "_") zoomTo(1 / 0.6);
+  else if (e.key === "0") fitView(true);
+  else if (moves[e.key]) { e.preventDefault(); animateTo({ x: vb.x + moves[e.key][0], y: vb.y + moves[e.key][1], w: vb.w }, 200); }
 });
 
-// On tall screens (phones), zoom in so the map fills the height instead of floating in white space.
-function fitView() {
-  const r = svg.getBoundingClientRect();
-  if (!r.width || !r.height) return setVB({ ...BASE });
-  const fillW = BASE.h * r.width / r.height;
-  const w = Math.min(BASE.w, Math.max(660, fillW));
-  const h = w * BASE.h / BASE.w;
-  setVB({ x: BASE.x + (BASE.w - w) / 2 + 10, y: BASE.y + (BASE.h - h) / 2, w });
+// Starting view: the whole map on wide screens; on tall phones, fill the height so it isn't tiny.
+function fitView(smooth) {
+  const a = aspect();
+  const portrait = a < 0.9;
+  const w = portrait ? Math.max(BASE.h * a, Math.min(660, maxW())) : maxW();
+  const target = { x: BASE.x + (BASE.w - w) / 2 + (portrait ? 10 : 0), y: BASE.y + (BASE.h - w / a) / 2, w };
+  smooth ? animateTo(target) : setVB(target);
 }
 
 // ======================= Bottom bar =======================
@@ -398,6 +468,9 @@ route();
 drawBackground(); drawNetwork(); renderBar(); renderPanel(); fitView();
 checkAlertDot();
 let lastW = innerWidth;
-addEventListener("resize", () => { if (Math.abs(innerWidth - lastW) > 80) { lastW = innerWidth; fitView(); } });
+addEventListener("resize", () => {
+  if (Math.abs(innerWidth - lastW) > 80) { lastW = innerWidth; fitView(); }
+  else setVB(vb); // re-clamp to the new shape
+});
 setInterval(renderBar, 60000);
 setInterval(checkAlertDot, 120000);

@@ -106,6 +106,7 @@ function pointAlong(pts, a, b, frac) {
 function renderTrains() {
   if (!trainLayer || !trainLayer.isConnected) trainLayer = el("g", { id: "trains" });
   svg.appendChild(trainLayer); // keep trains above the network after redraws
+  if (typeof hitLayer !== "undefined" && hitLayer) svg.appendChild(hitLayer); // station taps stay on top
   trainLayer.innerHTML = "";
   updatePill();
   if (!showTrains) return;
