@@ -5,6 +5,7 @@ An interactive take on the BART system map that keeps the look of the official m
 ## Features
 
 - **Map tab**: the system map in the style of the official BART map. Drag to pan, pinch or scroll to zoom, and use the +/- buttons on any device.
+- **Evening = dark mode**: when evening service starts at 9pm (or when you tap Evening), the whole site shifts to a dark theme.
 - **Bottom bar**: switch between Daytime and Evening service and tap a line chip to spotlight that line. At night, Red and Green show as "off tonight."
 - **Fog intro**: the site opens under Karl's fog with "Karl's Friend"; the fog parts, carrying the words away, and BART flies into the logo. Tap or press any key to skip.
 - **Mini trains**: little trains move along the map using BART's live departure data (positions are estimated from arrival times). If live data can't load, it falls back to estimated positions and says so. Tap the pill in the corner to hide them.

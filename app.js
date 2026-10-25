@@ -209,6 +209,8 @@ function renderBar() {
 
   const now = new Date(), h = now.getHours();
   const live = h >= 21 ? "night" : h >= 5 ? "day" : null;
+  // Flip to evening (and dark mode) on its own when 9pm hits, unless the rider picked a mode.
+  if (!manualMode && live && live !== mode && typeof applyTheme === "function") { setMode(live); return; }
   let text;
   if (live === "day") {
     const mins = (21 - h) * 60 - now.getMinutes();
@@ -376,15 +378,21 @@ window.addEventListener("hashchange", route);
 document.getElementById("view-sources").appendChild(document.querySelector(".site-footer").cloneNode(true));
 
 // ======================= Setup =======================
+// Evening service = dark theme, across every page.
+function applyTheme() { document.documentElement.dataset.theme = mode === "night" ? "night" : "day"; }
+
+let manualMode = false; // once someone taps Day/Evening, stop auto-switching at 9pm
 function setMode(m) {
   if (m === mode) return;
   mode = m; focusedLine = null;
+  applyTheme();
   drawNetwork(); renderBar(); renderPanel();
 }
-document.querySelectorAll(".toggle button").forEach(b => b.onclick = () => setMode(b.dataset.mode));
+document.querySelectorAll(".toggle button").forEach(b => b.onclick = () => { manualMode = true; setMode(b.dataset.mode); });
 
 const hour = new Date().getHours();
 mode = hour >= 21 || hour < 4 ? "night" : "day";
+applyTheme();
 if (isSmall()) sheet.classList.add("collapsed");
 route();
 drawBackground(); drawNetwork(); renderBar(); renderPanel(); fitView();
