@@ -3,18 +3,21 @@
 (function intro() {
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-  // Fog texture: SVG turbulence noise turned into soft white clouds.
+  // Fog texture: seamless SVG noise turned into soft clouds.
+  // Day: white fog. Night: a dimmer, moonlit blue-gray haze so it doesn't go blotchy on the dark map.
+  const night = document.documentElement.dataset.theme === "night";
+  const tint = night ? "0 0 0 0 .74  0 0 0 0 .80  0 0 0 0 .90  0 0 0 .9 -0.14" : "0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1.6 -0.35";
   const fogTex = `url("data:image/svg+xml,${encodeURIComponent(`
     <svg xmlns='http://www.w3.org/2000/svg' width='600' height='600'>
-      <filter id='f' x='0' y='0'>
-        <feTurbulence type='fractalNoise' baseFrequency='0.006' numOctaves='4' seed='7'/>
-        <feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1.6 -0.35'/>
+      <filter id='f' x='0' y='0' width='100%' height='100%'>
+        <feTurbulence type='fractalNoise' baseFrequency='${night ? 0.004 : 0.006}' numOctaves='${night ? 3 : 4}' seed='7' stitchTiles='stitch'/>
+        <feColorMatrix values='${tint}'/>
       </filter>
-      <rect width='600' height='600' filter='url(%23f)'/>
-    </svg>`.replace(/%23/g, "#"))}")`;
+      <rect width='600' height='600' filter='url(#f)'/>
+    </svg>`)}")`;
 
   const ov = document.createElement("div");
-  ov.className = "fog-intro";
+  ov.className = "fog-intro" + (night ? " night" : "");
   ov.setAttribute("aria-hidden", "true");
   ov.innerHTML = `
     <div class="intro-veil"></div>

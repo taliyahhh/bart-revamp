@@ -421,11 +421,10 @@ body.intro-on .brand span { opacity: 0; }
 :root[data-theme="night"] .sf-official { background: #1f6fae; }
 :root[data-theme="night"] .tag .badge, :root[data-theme="night"] .chip .badge { box-shadow: 0 0 0 1px rgba(255,255,255,.08); }
 /* Karl illustration at night */
-:root[data-theme="night"] .karl-art .k-sky { fill: #1a2030; }
+:root[data-theme="night"] .karl-art .k-sky { fill: #141b2b; }
 :root[data-theme="night"] .karl-art .k-water { fill: #142536; }
 :root[data-theme="night"] .karl-art .k-land1 { fill: #2a2e36; }
 :root[data-theme="night"] .karl-art .k-land2 { fill: #23272e; }
-:root[data-theme="night"] .fog path { opacity: .35; }
 
 /* smooth day-to-night change */
 body, .topnav, .sheet, .zoom, .zoom button, .bottombar, .site-footer, .live-pill, .thumb, .tag, .alert,
@@ -436,3 +435,19 @@ body, .topnav, .sheet, .zoom, .zoom button, .bottombar, .site-footer, .live-pill
 
 /* Bigger tap targets on touch screens */
 @media (pointer: coarse) { .hit { stroke-width: 36; } .line-path { stroke-width: 7.5; } }
+
+/* Night intro fog: soft moonlit haze instead of white clouds */
+.fog-intro.night .intro-veil { background: rgba(12, 16, 24, .55); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.fog-intro.night .fog-tex { opacity: .75; background-size: 900px 900px; }
+.fog-intro.night .fog-tex.slow { opacity: .5; background-size: 1400px 1400px; }
+.fog-intro.night .intro-words { color: #e9ecf2; text-shadow: 0 0 40px rgba(150, 175, 210, .35); }
+.fog-intro.night .intro-bart { text-shadow: 0 0 40px rgba(12, 16, 24, .8); }
+.fog-intro.night .intro-skip { background: rgba(20, 24, 32, .7); color: #e9ecf2; border-color: rgba(255,255,255,.2); }
+
+/* Karl illustration at night: moonlit fog, a moon and a few stars */
+.karl-art .k-night { display: none; }
+:root[data-theme="night"] .karl-art .k-night { display: inline; }
+:root[data-theme="night"] .fog .f1 { fill: #9fb2cc; opacity: .32; }
+:root[data-theme="night"] .fog .f2 { fill: #b7c6db; opacity: .4; }
+:root[data-theme="night"] .fog .f3 { fill: #8ea3c0; opacity: .22; }
+:root[data-theme="night"] .karl-art g[fill="#c0442c"], :root[data-theme="night"] .karl-art g[stroke="#c0442c"] { filter: brightness(.9) saturate(.85); }
