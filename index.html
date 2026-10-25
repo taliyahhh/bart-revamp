@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fogline: a friendlier BART map</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-service="day">
+  <header class="top">
+    <div class="brand">
+      <h1>Fogline</h1>
+      <p>The whole Bay, one line at a time.</p>
+    </div>
+    <div class="toggle" role="group" aria-label="Service period">
+      <button data-mode="day" class="active">Day</button>
+      <button data-mode="night">Night</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <aside class="panel">
+      <section>
+        <h2>Lines</h2>
+        <p class="hint" id="service-label"></p>
+        <ul id="line-list" class="line-list"></ul>
+      </section>
+
+      <section>
+        <h2>Trip</h2>
+        <label>From <select id="from"></select></label>
+        <label>To <select id="to"></select></label>
+        <div id="trip" class="trip"></div>
+        <button id="clear" class="ghost">Clear</button>
+      </section>
+    </aside>
+
+    <div class="map-wrap">
+      <svg id="map" viewBox="0 0 1000 960" aria-label="BART system map"></svg>
+    </div>
+  </main>
+
+  <script src="data/bart.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
