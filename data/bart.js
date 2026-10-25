@@ -1,4 +1,4 @@
-// BART Revamp data. Coordinates use a 1183 x 1008 viewBox laid out like the
+// Karl's Friend Bart data. Coordinates use a 1183 x 1008 viewBox laid out like the
 // official system map. label: L/R/T/B = which side the name sits on.
 // bold: terminal stations. wp: true = a bend in the track, not a station.
 // g = trunk group, used to decide how parallel lines are spaced.

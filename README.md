@@ -1,4 +1,4 @@
-# BART Revamp
+# Karl's Friend Bart
 
 An interactive take on the BART system map that keeps the look of the official map and makes it easier to read one route at a time.
 
