@@ -331,12 +331,14 @@ body[data-view="about"] .topnav { background: var(--paper); border-color: #d8d7d
   text-shadow: 0 2px 30px rgba(239, 238, 234, .9);
 }
 .fog-intro.reveal .intro-bart { opacity: 1; transform: scale(1); }
-.intro-bart.fly { transition: transform .8s cubic-bezier(.65, 0, .25, 1), opacity .8s ease .2s; opacity: .0 !important; }
+.intro-bart.fly { transition: transform .8s cubic-bezier(.65, 0, .25, 1); text-shadow: none; }
+/* Keep the logo's BART hidden until the flying BART lands in it */
+body.intro-on .brand span { opacity: 0; }
 
 .intro-skip {
   position: absolute; right: 18px; bottom: calc(18px + env(safe-area-inset-bottom));
   border: 1px solid rgba(35,31,32,.25); background: rgba(239,238,234,.7); border-radius: 99px;
   padding: 6px 14px; font-size: 12px; color: var(--ink);
 }
-.brand-pop span { animation: brandpop 1.2s ease; }
-@keyframes brandpop { 0% { opacity: .3; } 100% { opacity: 1; } }
+.brand-pop span { animation: brandpop .5s ease; }
+@keyframes brandpop { 0% { opacity: 0; } 100% { opacity: 1; } }
