@@ -247,7 +247,7 @@ function applyFocus() {
     LINES[focusedLine].path.forEach(s => svg.querySelector(`.station[data-id="${s}"]`)?.classList.add("hl"));
   }
 }
-function focusLine(id) { focusedLine = id; applyFocus(); renderBar(); }
+function focusLine(id) { focusedLine = id; applyFocus(); renderBar(); if (typeof renderTrains === "function") renderTrains(); }
 function selectStation(id) {
   selected = id;
   svg.querySelectorAll(".station.selected").forEach(n => n.classList.remove("selected"));
