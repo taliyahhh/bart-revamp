@@ -3,12 +3,12 @@
 // label: "l" puts the station name on the left, default is right.
 
 window.STATIONS = {
-  richmond:        { name: "Richmond", x: 330, y: 80 },
-  elcerritonorte:  { name: "El Cerrito del Norte", x: 345, y: 120 },
-  elcerritoplaza:  { name: "El Cerrito Plaza", x: 360, y: 160 },
-  northberkeley:   { name: "North Berkeley", x: 375, y: 200 },
+  richmond:        { name: "Richmond", x: 330, y: 80, label: "l" },
+  elcerritonorte:  { name: "El Cerrito del Norte", x: 345, y: 120, label: "l" },
+  elcerritoplaza:  { name: "El Cerrito Plaza", x: 360, y: 160, label: "l" },
+  northberkeley:   { name: "North Berkeley", x: 375, y: 200, label: "l" },
   downtownberkeley:{ name: "Downtown Berkeley", x: 390, y: 240 },
-  ashby:           { name: "Ashby", x: 405, y: 280 },
+  ashby:           { name: "Ashby", x: 405, y: 280, label: "l" },
   macarthur:       { name: "MacArthur", x: 420, y: 330 },
   "19th":          { name: "19th St/Oakland", x: 420, y: 370 },
   "12th":          { name: "12th St/Oakland City Center", x: 420, y: 410 },
@@ -34,7 +34,7 @@ window.STATIONS = {
   walnutcreek:     { name: "Walnut Creek", x: 580, y: 180 },
   pleasanthill:    { name: "Pleasant Hill/Contra Costa Centre", x: 620, y: 145 },
   concord:         { name: "Concord", x: 660, y: 110 },
-  northconcord:    { name: "North Concord/Martinez", x: 700, y: 75 },
+  northconcord:    { name: "North Concord/Martinez", x: 700, y: 75, label: "l" },
   pittsburgbp:     { name: "Pittsburg/Bay Point", x: 765, y: 50, label: "t" },
   pittsburgcenter: { name: "Pittsburg Center", x: 845, y: 50, label: "b" },
   antioch:         { name: "Antioch", x: 925, y: 50, label: "b" },
