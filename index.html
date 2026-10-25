@@ -9,22 +9,40 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main class="map-wrap">
-    <svg id="map" viewBox="0 0 1183 1008" aria-label="BART system map"></svg>
+  <header class="header">
+    <div class="header-row">
+      <h1>BART <span>Revamp</span></h1>
 
-    <div class="card trip">
-      <div class="card-head">Plan a Trip</div>
-      <div class="card-body">
-        <label>From <select id="from"></select></label>
-        <label>To <select id="to"></select></label>
-        <div id="trip" class="trip-out"></div>
-        <button id="clear">Clear</button>
+      <div class="service">
+        <div class="toggle" role="group" aria-label="Service period">
+          <button data-mode="day">Daytime <small>until 9pm</small></button>
+          <button data-mode="night">Evening <small>9pm to midnight</small></button>
+        </div>
+        <span id="status" class="status"></span>
+      </div>
+
+      <div class="versions" role="group" aria-label="Panel version">
+        <span>Panel:</span>
+        <button data-v="station">Station card</button>
+        <button data-v="departures">Live departures</button>
+        <button data-v="alerts">Alerts</button>
       </div>
     </div>
+
+    <nav id="chips" class="chips" aria-label="Lines"></nav>
+  </header>
+
+  <main class="layout">
+    <div class="map-wrap">
+      <svg id="map" viewBox="50 40 1120 900" aria-label="BART system map"></svg>
+    </div>
+    <aside id="panel" class="panel"></aside>
   </main>
+
   <p class="footer">BART Revamp is a fan project and is not affiliated with BART. Check bart.gov for current service.</p>
 
   <script src="data/bart.js"></script>
+  <script src="data/station-info.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
