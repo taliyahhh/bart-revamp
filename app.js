@@ -287,7 +287,7 @@ function lineTags(id) {
 function stationPanel() {
   if (!selected) {
     panel.innerHTML = `<div class="empty"><strong>Pick a station</strong>Tap any station on the map to see its lines, the next trains leaving it, and what's nearby.</div>
-      <p class="credit-link">Live data from BART's public API · <a href="#credits">Sources &amp; credits</a></p>`;
+      <p class="credit-link">Live data from BART's public API · <a href="#sources">Data &amp; sources</a></p>`;
     return;
   }
   const id = selected, s = STATIONS[id], info = STATION_INFO[id] || {};
@@ -369,9 +369,10 @@ async function checkAlertDot() {
 // ======================= Views (Map / About) =======================
 function route() {
   const hash = location.hash.slice(1);
-  const view = ["about", "karl", "credits"].includes(hash) ? "about" : "map";
+  const view = hash === "sources" ? "sources" : ["about", "karl"].includes(hash) ? "about" : "map";
   document.body.dataset.view = view;
   document.querySelectorAll(".tabs a").forEach(a => a.classList.toggle("active", a.dataset.view === view));
+  if (view === "sources") document.getElementById("view-sources").scrollTop = 0;
   if (view === "about") {
     const target = hash === "about" ? null : document.getElementById(hash);
     requestAnimationFrame(() => target ? target.scrollIntoView({ behavior: "smooth" }) : (document.getElementById("view-about").scrollTop = 0));
@@ -379,6 +380,7 @@ function route() {
   else if (layer) { drawNetwork(); fitView(); } // label sizes need the map to be visible
 }
 window.addEventListener("hashchange", route);
+document.getElementById("view-sources").appendChild(document.querySelector(".site-footer").cloneNode(true));
 
 // ======================= Setup =======================
 function setMode(m) {

@@ -153,42 +153,72 @@
       </div>
     </section>
 
-    <footer class="site-footer" id="credits">
+    <footer class="site-footer">
       <div class="sf-inner">
-        <div class="sf-brand">
-          <a href="#map" class="sf-logo">Karl's Friend <span>BART</span></a>
-          <p>A fan-made love letter to the Bay's trains, and the fog that hangs out above them.</p>
+        <div class="sf-links">
           <a class="sf-official" href="https://www.bart.gov" target="_blank" rel="noopener">Visit the official BART site &#8599;</a>
+          <a class="sf-sources" href="#sources">Data &amp; sources</a>
         </div>
-
-        <nav class="sf-col" aria-label="Explore">
-          <h4>Explore</h4>
-          <a href="#map">System map</a>
-          <a href="#about">About BART</a>
-          <a href="#karl" data-scroll="karl">Meet Karl</a>
-        </nav>
-
-        <nav class="sf-col" aria-label="Data and sources">
-          <h4>Data &amp; sources</h4>
-          <a href="https://api.bart.gov" target="_blank" rel="noopener">BART Real-Time API</a>
-          <a href="https://www.bart.gov/node/12402" target="_blank" rel="noopener">BART system facts</a>
-          <a href="https://www.bart.gov/legacycars" target="_blank" rel="noopener">Legacy fleet retirement</a>
-          <a href="https://m.bart.gov/cars" target="_blank" rel="noopener">Fleet of the Future</a>
-          <a href="https://kqed.org/news/11682057/how-the-bay-areas-fog-came-to-be-named-karl" target="_blank" rel="noopener">How the fog got named Karl (KQED)</a>
-        </nav>
-
-        <nav class="sf-col" aria-label="Project">
-          <h4>Project</h4>
-          <a href="https://github.com/taliyahhh/bart-revamp" target="_blank" rel="noopener">Code on GitHub</a>
-          <a href="https://www.bart.gov" target="_blank" rel="noopener">Official schedules &amp; alerts</a>
-        </nav>
-      </div>
-
-      <div class="sf-bottom">
-        <p>Designed and built by <strong>Taliyah Harvey</strong> &middot; &copy; 2026</p>
-        <p>Fan project, not affiliated with or endorsed by BART. Live trains are positioned from BART's real-time arrival data and are approximate. Map and train illustrations are original drawings. Always check bart.gov before you ride.</p>
+        <p class="sf-credit">Designed and built by <strong>Taliyah Harvey</strong> &middot; &copy; 2026</p>
       </div>
     </footer>
+  </main>
+
+  <!-- DATA & SOURCES VIEW -->
+  <main id="view-sources" class="view about-view sources-view">
+    <section class="about sources">
+      <p class="kicker">Karl's Friend BART</p>
+      <h1 class="a-title src-title">Data &amp; sources</h1>
+      <p class="src-lede">Everything on this site comes from public information published by BART and trusted local reporting. Here's where it all comes from and how it's used.</p>
+
+      <div class="src-group">
+        <h2>Live data</h2>
+        <a class="src" href="https://api.bart.gov" target="_blank" rel="noopener">
+          <span class="src-name">BART Real-Time API</span>
+          <span class="src-desc">Next-train departures for every station, service advisories and elevator status. Refreshed every 30 seconds while you're on the map.</span>
+          <span class="src-arrow">&#8599;</span>
+        </a>
+      </div>
+
+      <div class="src-group">
+        <h2>How the mini trains work</h2>
+        <p class="src-note">BART publishes how many minutes away each train is from each station, not exact GPS locations. When a train is a few minutes from its next stop, the map places it that far back along the line and moves it forward as the countdown drops. Positions are approximate, especially on long stretches like the Transbay Tube. If the live feed can't load, the map switches to estimated positions from a regular schedule and labels them that way.</p>
+      </div>
+
+      <div class="src-group">
+        <h2>Facts &amp; history</h2>
+        <a class="src" href="https://www.bart.gov/node/12402" target="_blank" rel="noopener">
+          <span class="src-name">BART system facts</span>
+          <span class="src-desc">Stations, miles of track, the Transbay Tube and other system numbers on the About page.</span>
+          <span class="src-arrow">&#8599;</span>
+        </a>
+        <a class="src" href="https://www.bart.gov/legacycars" target="_blank" rel="noopener">
+          <span class="src-name">Legacy fleet decommissioning</span>
+          <span class="src-desc">The original cars' generations and their retirement in April 2024.</span>
+          <span class="src-arrow">&#8599;</span>
+        </a>
+        <a class="src" href="https://m.bart.gov/cars" target="_blank" rel="noopener">
+          <span class="src-name">Fleet of the Future</span>
+          <span class="src-desc">BART's newer train cars and their features.</span>
+          <span class="src-arrow">&#8599;</span>
+        </a>
+        <a class="src" href="https://kqed.org/news/11682057/how-the-bay-areas-fog-came-to-be-named-karl" target="_blank" rel="noopener">
+          <span class="src-name">How the Bay Area's fog came to be named Karl (KQED)</span>
+          <span class="src-desc">The 2010 account behind the name, and the <i>Big Fish</i> connection.</span>
+          <span class="src-arrow">&#8599;</span>
+        </a>
+      </div>
+
+      <div class="src-group">
+        <h2>Design</h2>
+        <p class="src-note">The system map is redrawn from scratch, following the layout and line colors of BART's official system map. The train and Golden Gate illustrations are original drawings. Type is set in Inter and Work Sans from Google Fonts.</p>
+      </div>
+
+      <div class="src-group">
+        <h2>Disclaimer</h2>
+        <p class="src-note">Karl's Friend BART is a fan project. It is not affiliated with or endorsed by the San Francisco Bay Area Rapid Transit District. Always check bart.gov for official schedules and service alerts before you ride.</p>
+      </div>
+    </section>
   </main>
 
   <script src="data/bart.js"></script>
