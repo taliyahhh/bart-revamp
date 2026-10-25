@@ -90,7 +90,7 @@
       </div>
 
       <!-- Meet Karl -->
-      <section class="karl" aria-labelledby="karl-title">
+      <section class="karl" id="karl" aria-labelledby="karl-title">
         <div class="karl-left">
           <p class="kicker">Meet the friend</p>
           <h2 id="karl-title" class="k-title">Karl</h2>
@@ -150,9 +150,45 @@
 
       <div class="about-foot">
         <a href="#map" class="cta">Explore the map &rarr;</a>
-        <p>Karl's Friend Bart is a fan project and is not affiliated with BART. Check bart.gov for current service.</p>
       </div>
     </section>
+
+    <footer class="site-footer" id="credits">
+      <div class="sf-inner">
+        <div class="sf-brand">
+          <a href="#map" class="sf-logo">Karl's Friend <span>BART</span></a>
+          <p>A fan-made love letter to the Bay's trains, and the fog that hangs out above them.</p>
+          <a class="sf-official" href="https://www.bart.gov" target="_blank" rel="noopener">Visit the official BART site &#8599;</a>
+        </div>
+
+        <nav class="sf-col" aria-label="Explore">
+          <h4>Explore</h4>
+          <a href="#map">System map</a>
+          <a href="#about">About BART</a>
+          <a href="#karl" data-scroll="karl">Meet Karl</a>
+        </nav>
+
+        <nav class="sf-col" aria-label="Data and sources">
+          <h4>Data &amp; sources</h4>
+          <a href="https://api.bart.gov" target="_blank" rel="noopener">BART Real-Time API</a>
+          <a href="https://www.bart.gov/node/12402" target="_blank" rel="noopener">BART system facts</a>
+          <a href="https://www.bart.gov/legacycars" target="_blank" rel="noopener">Legacy fleet retirement</a>
+          <a href="https://m.bart.gov/cars" target="_blank" rel="noopener">Fleet of the Future</a>
+          <a href="https://kqed.org/news/11682057/how-the-bay-areas-fog-came-to-be-named-karl" target="_blank" rel="noopener">How the fog got named Karl (KQED)</a>
+        </nav>
+
+        <nav class="sf-col" aria-label="Project">
+          <h4>Project</h4>
+          <a href="https://github.com/taliyahhh/bart-revamp" target="_blank" rel="noopener">Code on GitHub</a>
+          <a href="https://www.bart.gov" target="_blank" rel="noopener">Official schedules &amp; alerts</a>
+        </nav>
+      </div>
+
+      <div class="sf-bottom">
+        <p>Designed and built by <strong>Taliyah Harvey</strong> &middot; &copy; 2026</p>
+        <p>Fan project, not affiliated with or endorsed by BART. Live trains are positioned from BART's real-time arrival data and are approximate. Map and train illustrations are original drawings. Always check bart.gov before you ride.</p>
+      </div>
+    </footer>
   </main>
 
   <script src="data/bart.js"></script>
