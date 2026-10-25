@@ -287,7 +287,7 @@ function lineTags(id) {
 function stationPanel() {
   if (!selected) {
     panel.innerHTML = `<div class="empty"><strong>Pick a station</strong>Tap any station on the map to see its lines, the next trains leaving it, and what's nearby.</div>
-      <p class="credit-link">Live data from BART's public API · <a href="#sources">Data &amp; sources</a></p>`;
+      <p class="credit-link">Live data from BART's public API · <a href="#sources">Data &amp; Sources</a></p>`;
     return;
   }
   const id = selected, s = STATIONS[id], info = STATION_INFO[id] || {};
