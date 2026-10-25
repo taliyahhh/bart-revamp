@@ -30,8 +30,12 @@ function draw() {
     if (!served.has(id)) continue;
     const g = el("g", { class: "station", "data-id": id });
     el("circle", { cx: s.x + 3, cy: s.y, r: 6 }, g);
-    const left = s.label === "l";
-    const t = el("text", { x: s.x + (left ? -14 : 20), y: s.y + 4, "text-anchor": left ? "end" : "start" }, g);
+    const pos = {
+      l: { x: s.x - 14, y: s.y + 4, a: "end" },
+      t: { x: s.x + 3, y: s.y - 14, a: "middle" },
+      b: { x: s.x + 3, y: s.y + 24, a: "middle" }
+    }[s.label] || { x: s.x + 20, y: s.y + 4, a: "start" };
+    const t = el("text", { x: pos.x, y: pos.y, "text-anchor": pos.a }, g);
     t.textContent = s.name;
     g.addEventListener("click", () => pickStation(id));
   }
