@@ -229,13 +229,6 @@ function renderBar() {
     c.onclick = () => focusLine(focusedLine === line.id ? null : line.id);
     chips.appendChild(c);
   }
-  for (const [id, name, a, b] of SERVICE[mode].gone || []) {
-    const c = document.createElement("button");
-    c.className = "chip off";
-    c.title = `No evening service. Use the Orange or ${b === "Y" ? "Yellow" : "Blue"} Line.`;
-    c.innerHTML = `<span class="badge" style="background:${LINES[id].color};color:#fff">${LINES[id].letter}</span>${name} <small>off tonight</small>`;
-    chips.appendChild(c);
-  }
 }
 
 // ======================= Focus + selection =======================
