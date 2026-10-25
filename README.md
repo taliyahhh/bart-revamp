@@ -1,43 +1,31 @@
-# Fogline
+# BART Revamp
 
-A friendlier, more personal take on the BART map. The whole Bay, one line at a time.
+An interactive take on the BART system map that keeps the look of the official map and makes it easier to read one route at a time.
 
-Fogline is a side project reimagining how the BART system map looks and feels. Instead of one dense diagram, it lets you spotlight a single line, see how service changes after 9pm, and trace your trip between any two stations.
+## Features
 
-## Features (v0.1)
-
-- **Day / Night toggle**: daytime shows all 5 lines plus the OAK Airport connector; evening (9pm to midnight) shows the 3 lines that keep running. The whole page shifts to a night palette, and it opens in night mode automatically after 9pm.
-- **Line spotlight**: tap a line to fade everything else and see exactly where it goes.
-- **Trip highlight**: pick two stations (or tap them on the map) and Fogline draws your route, preferring fewer transfers, with each leg broken out.
+- **Day / Evening service**: click the Daytime or Evening legend box to switch. Daytime shows all 5 lines plus the OAK Airport connector; evening (9pm to midnight) shows Orange, Yellow (to Millbrae) and Blue. The map opens in evening mode automatically after 9pm.
+- **Line spotlight**: click a line on the map or in the legend to fade everything else.
+- **Trip highlight**: pick two stations in Plan a Trip (or click them on the map) to see your route, each leg, and where to transfer. It prefers fewer transfers and favors the timed transfers at MacArthur and 19th St.
 
 ## Run it
 
-No build step. Open `index.html` in a browser, or:
+No build step. Open `index.html`, or run `npx serve .`
 
-```bash
-npx serve .
-```
-
-## Project structure
+## Structure
 
 ```
-data/bart.js   station coordinates, lines, and day/night service
-app.js         map drawing, line focus, trip planner
-style.css      day and night themes
+data/bart.js   stations (x/y on a 1183 x 1008 canvas), lines, day/evening service
+app.js         drawing, legend, spotlight, trip planner
+style.css      map styling
 index.html
 ```
 
-The map is a hand-drawn schematic (coordinates in `data/bart.js`), so tweaking the layout is just editing x/y values.
+## Ideas for later
 
-## Roadmap ideas
+- Live departures from the BART API (api.bart.gov)
+- Bay Area layer: food, murals, parks and game days near each station
+- Station pages with neighborhood history
+- Mobile layout and installable PWA
 
-- [ ] Real-time departures from the BART API (api.bart.gov)
-- [ ] "Bay Area stuff" layer: what's near each station (food, murals, parks, Warriors / Giants game days)
-- [ ] Station pages with local history and neighborhood vibe
-- [ ] Fog mode: animated fog rolling over the SF side of the map
-- [ ] Mobile-first redesign and installable PWA
-- [ ] Accessibility pass: elevator status, high-contrast theme
-
-## Disclaimer
-
-Fan project, not affiliated with BART. Service info based on the 2026 BART system map; always check bart.gov for current schedules.
+Fan project, not affiliated with BART. Check bart.gov for current service.
