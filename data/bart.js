@@ -7,7 +7,7 @@ window.STATIONS = {
   elcerritonorte:  { name: "El Cerrito del Norte", x: 345, y: 120, label: "l" },
   elcerritoplaza:  { name: "El Cerrito Plaza", x: 360, y: 160, label: "l" },
   northberkeley:   { name: "North Berkeley", x: 375, y: 200, label: "l" },
-  downtownberkeley:{ name: "Downtown Berkeley", x: 390, y: 240 },
+  downtownberkeley:{ name: "Downtown Berkeley", x: 390, y: 240, label: "l" },
   ashby:           { name: "Ashby", x: 405, y: 280, label: "l" },
   macarthur:       { name: "MacArthur", x: 420, y: 330 },
   "19th":          { name: "19th St/Oakland", x: 420, y: 370 },
