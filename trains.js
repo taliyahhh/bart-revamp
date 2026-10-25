@@ -91,3 +91,21 @@ function renderAbout() {
 document.getElementById("prev").onclick = () => { slide = (slide + SLIDES.length - 1) % SLIDES.length; renderAbout(); };
 document.getElementById("next").onclick = () => { slide = (slide + 1) % SLIDES.length; renderAbout(); };
 renderAbout();
+
+// Vertical hanger cables on the bridge in the Karl illustration.
+(function drawHangers() {
+  const g = document.getElementById("hangers");
+  if (!g) return;
+  // main cable: quadratic from (150,110) via (300,232)/(510,232) to (660,110), approximated per side
+  const cableY = x => {
+    const span = x <= 405 ? [150, 405] : [405, 660];
+    const t = (x - span[0]) / (span[1] - span[0]);
+    return x <= 405 ? 110 + (232 - 110) * (1 - (1 - t) * (1 - t)) : 232 - (232 - 110) * t * t;
+  };
+  let out = "";
+  for (let x = 168; x < 650; x += 16) {
+    const y = cableY(x);
+    if (236 - y > 6) out += `<line x1="${x}" y1="${y.toFixed(1)}" x2="${x}" y2="236"/>`;
+  }
+  g.innerHTML = out;
+})();

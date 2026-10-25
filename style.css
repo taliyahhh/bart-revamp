@@ -235,3 +235,43 @@ body[data-view="about"] .topnav { background: var(--paper); border-color: #d8d7d
   .intro { font-size: 16px; text-align: left; margin-top: 36px; }
   .numbers strong { font-size: 26px; }
 }
+
+/* ---------- Meet Karl ---------- */
+.karl {
+  display: grid; grid-template-columns: minmax(220px, 290px) 1fr; gap: 28px 44px;
+  margin-top: 72px; padding-top: 40px; border-top: 1px solid #9a9993;
+}
+.kicker { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin: 0 0 6px; }
+.k-title { font-family: "Work Sans", sans-serif; font-weight: 900; font-size: clamp(64px, 7.5vw, 104px); line-height: .9; margin: 0; letter-spacing: -0.02em; }
+.k-sub { font-family: "Work Sans", sans-serif; font-weight: 300; font-size: 28px; margin: 6px 0 0; color: #4a4a4a; }
+.k-years { margin-top: 22px; padding-top: 14px; border-top: 1px solid #9a9993; font-size: 13px; color: var(--muted); }
+.karl-art { overflow: hidden; border-radius: 2px; align-self: stretch; min-height: 220px; }
+.karl-art svg { width: 100%; height: 100%; display: block; }
+.fog path { will-change: transform; }
+.fog .f1 { animation: drift 38s ease-in-out infinite alternate; }
+.fog .f2 { animation: drift 52s ease-in-out infinite alternate-reverse; }
+.fog .f3 { animation: drift 30s ease-in-out infinite alternate; animation-delay: -10s; }
+@keyframes drift { from { transform: translateX(-60px); } to { transform: translateX(160px); } }
+@media (prefers-reduced-motion: reduce) { .fog path { animation: none; } }
+
+.karl-text { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid #cfcec8; }
+.karl-text > div { padding: 20px 18px 0; }
+.karl-text > div + div { border-left: 1px solid #cfcec8; }
+.karl-text h3 { font-family: "Work Sans", sans-serif; font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; margin: 0 0 8px; }
+.karl-text p { font-size: 14px; line-height: 1.55; margin: 0; }
+
+@media (max-width: 999px) {
+  .karl { grid-template-columns: 1fr; margin-top: 56px; }
+  .karl-left { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 14px; }
+  .kicker { width: 100%; }
+  .k-years { width: 100%; margin-top: 8px; }
+  .karl-art { min-height: 0; aspect-ratio: 800 / 340; }
+  .karl-text { grid-template-columns: 1fr 1fr; }
+  .karl-text > div:nth-child(3) { border-left: 0; }
+  .karl-text > div:nth-child(n+3) { padding-top: 24px; }
+}
+@media (max-width: 599px) {
+  .karl-text { grid-template-columns: 1fr; }
+  .karl-text > div { padding: 18px 0 0; border-left: 0 !important; }
+  .k-sub { font-size: 22px; }
+}
