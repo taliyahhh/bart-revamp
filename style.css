@@ -275,3 +275,18 @@ body[data-view="about"] .topnav { background: var(--paper); border-color: #d8d7d
   .karl-text > div { padding: 18px 0 0; border-left: 0 !important; }
   .k-sub { font-size: 22px; }
 }
+
+/* ---------- Mini trains ---------- */
+.train { pointer-events: auto; transition: transform 1.8s linear, opacity .25s; }
+#map.focus .train { opacity: .15; }
+#map.focus .train.hl { opacity: 1; }
+.live-pill {
+  position: absolute; left: 14px; bottom: 14px; display: flex; align-items: center; gap: 8px;
+  background: var(--paper); border: 1px solid var(--line); border-radius: 99px;
+  padding: 6px 12px; font-size: 12px; font-weight: 500; box-shadow: 0 2px 8px rgba(0,0,0,.06);
+}
+.pulse { width: 8px; height: 8px; border-radius: 50%; background: #9a9993; }
+.pulse.on { background: #4DB848; animation: pulse 1.6s ease-out infinite; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(77,184,72,.6); } 100% { box-shadow: 0 0 0 8px rgba(77,184,72,0); } }
+@media (max-width: 1099px) { .live-pill { top: 14px; bottom: auto; } }
+@media (max-width: 699px) { .live-pill { top: 10px; left: 10px; font-size: 11px; } }
