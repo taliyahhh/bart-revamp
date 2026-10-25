@@ -4,7 +4,7 @@
   --region: #1d77b8;
   --ink: #231f20;
   --muted: #6d6e71;
-  --line: #e1e3e5;
+  --line: #d8d7d2;
   --water: #d5ecf6;
   --rail: #d9dbdd;
   --paper: #efeeea;
@@ -17,7 +17,7 @@ body {
   margin: 0;
   font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
   color: var(--ink);
-  background: #fff;
+  background: var(--paper);
   display: flex; flex-direction: column;
   height: 100dvh; overflow: hidden;
 }
@@ -35,7 +35,7 @@ body[data-view="about"] { background: var(--paper); }
 .topnav {
   height: var(--top); flex: none;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 0 24px; border-bottom: 1px solid var(--line); background: #fff;
+  padding: 0 24px; border-bottom: 1px solid var(--line); background: var(--paper);
 }
 body[data-view="about"] .topnav { background: var(--paper); border-color: #d8d7d2; }
 .brand { font-weight: 800; font-size: 19px; letter-spacing: -0.02em; text-decoration: none; }
@@ -50,10 +50,10 @@ body[data-view="about"] .topnav { background: var(--paper); border-color: #d8d7d
 #map { width: 100%; height: 100%; display: block; touch-action: none; user-select: none; -webkit-user-select: none; }
 #map.grabbing { cursor: grabbing; }
 
-.zoom { position: absolute; top: 14px; right: 14px; display: flex; flex-direction: column; background: #fff; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,.06); }
-.zoom button { width: 38px; height: 38px; border: 0; background: #fff; font-size: 20px; line-height: 1; }
+.zoom { position: absolute; top: 14px; right: 14px; display: flex; flex-direction: column; background: var(--paper); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,.06); }
+.zoom button { width: 38px; height: 38px; border: 0; background: var(--paper); font-size: 20px; line-height: 1; }
 .zoom button + button { border-top: 1px solid var(--line); }
-.zoom button:hover { background: #f4f6f7; }
+.zoom button:hover { background: #e4e3de; }
 .zoom button[data-zoom="reset"] { font-size: 17px; }
 
 /* map layers */
@@ -77,7 +77,7 @@ body[data-view="about"] .topnav { background: var(--paper); border-color: #d8d7d
 #map.focus .station.hl, #map.focus .station.selected { opacity: 1; }
 
 /* ---------- Side panel / bottom sheet ---------- */
-.sheet { display: flex; flex-direction: column; min-height: 0; border-left: 1px solid var(--line); background: #fff; }
+.sheet { display: flex; flex-direction: column; min-height: 0; border-left: 1px solid var(--line); background: var(--paper); }
 .sheet-head { flex: none; border-bottom: 1px solid var(--line); }
 .grab { display: none; }
 .ptabs { display: flex; padding: 0 20px; gap: 22px; }
@@ -93,7 +93,7 @@ body[data-view="about"] .topnav { background: var(--paper); border-color: #d8d7d
 .empty { color: var(--muted); line-height: 1.5; }
 .empty strong { color: var(--ink); display: block; font-size: 16px; margin-bottom: 4px; }
 .line-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-.tag { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; padding: 3px 8px 3px 3px; border-radius: 99px; background: #f3f4f5; }
+.tag { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; padding: 3px 8px 3px 3px; border-radius: 99px; background: #e4e3de; }
 .tag .badge { width: 18px; height: 18px; border-radius: 4px; display: grid; place-items: center; color: #fff; font-size: 10px; font-weight: 800; }
 
 .dep { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--line); }
@@ -103,7 +103,7 @@ body[data-view="about"] .topnav { background: var(--paper); border-color: #d8d7d
 .dep .mins { font-variant-numeric: tabular-nums; font-weight: 800; font-size: 15px; text-align: right; }
 .dep .mins small { display: block; font-weight: 400; color: var(--muted); font-size: 11px; }
 .refresh { margin-top: 10px; font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; align-items: center; }
-.refresh button { border: 1px solid var(--line); background: #fff; border-radius: 6px; padding: 3px 10px; font-size: 12px; }
+.refresh button { border: 1px solid var(--line); background: var(--paper); border-radius: 6px; padding: 3px 10px; font-size: 12px; }
 
 .alert { border-left: 4px solid var(--navy); background: #f4f8fb; padding: 10px 12px; margin-bottom: 10px; border-radius: 0 6px 6px 0; line-height: 1.45; }
 .alert.warn { border-color: #F7941D; background: #fff7ee; }
