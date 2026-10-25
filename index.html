@@ -2,47 +2,103 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>BART Revamp</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&family=Work+Sans:wght@300;400;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
-  <header class="header">
-    <div class="header-row">
-      <h1>BART <span>Revamp</span></h1>
-
-      <div class="service">
-        <div class="toggle" role="group" aria-label="Service period">
-          <button data-mode="day">Daytime <small>until 9pm</small></button>
-          <button data-mode="night">Evening <small>9pm to midnight</small></button>
-        </div>
-        <span id="status" class="status"></span>
-      </div>
-
-      <div class="versions" role="group" aria-label="Panel version">
-        <span>Panel:</span>
-        <button data-v="station">Station card</button>
-        <button data-v="departures">Live departures</button>
-        <button data-v="alerts">Alerts</button>
-      </div>
-    </div>
-
-    <nav id="chips" class="chips" aria-label="Lines"></nav>
+<body data-view="map">
+  <!-- Top nav -->
+  <header class="topnav">
+    <a class="brand" href="#map">BART <span>Revamp</span></a>
+    <nav class="tabs">
+      <a href="#map" data-view="map">Map</a>
+      <a href="#about" data-view="about">About BART</a>
+    </nav>
   </header>
 
-  <main class="layout">
+  <!-- MAP VIEW -->
+  <main id="view-map" class="view map-view">
     <div class="map-wrap">
       <svg id="map" viewBox="50 40 1120 900" aria-label="BART system map"></svg>
+      <div class="zoom">
+        <button data-zoom="in" aria-label="Zoom in">+</button>
+        <button data-zoom="out" aria-label="Zoom out">&minus;</button>
+        <button data-zoom="reset" aria-label="Reset view">&#8634;</button>
+      </div>
     </div>
-    <aside id="panel" class="panel"></aside>
+
+    <aside id="sheet" class="sheet">
+      <div class="sheet-head">
+        <button class="grab" aria-label="Expand or collapse panel"></button>
+        <div class="ptabs" role="tablist">
+          <button role="tab" data-tab="station" class="active">Station</button>
+          <button role="tab" data-tab="alerts">Alerts <span id="alert-dot" class="dot-badge" hidden></span></button>
+        </div>
+      </div>
+      <div id="panel" class="panel"></div>
+    </aside>
   </main>
 
-  <p class="footer">BART Revamp is a fan project and is not affiliated with BART. Check bart.gov for current service.</p>
+  <!-- Bottom control bar (map only) -->
+  <footer class="bottombar">
+    <div class="service">
+      <div class="toggle" role="group" aria-label="Service period">
+        <button data-mode="day">Daytime <small>until 9pm</small></button>
+        <button data-mode="night">Evening <small>9pm to midnight</small></button>
+      </div>
+      <span id="status" class="status"></span>
+    </div>
+    <nav id="chips" class="chips" aria-label="Lines"></nav>
+  </footer>
+
+  <!-- ABOUT VIEW -->
+  <main id="view-about" class="view about-view">
+    <section class="about">
+      <div class="about-grid">
+        <div class="a-left">
+          <h1 class="a-title">BART</h1>
+          <p class="acronym"><b>B</b>ay <b>A</b>rea <b>R</b>apid <b>T</b>ransit</p>
+          <div class="thumbs" id="thumbs"></div>
+          <div class="arrows">
+            <button id="prev" aria-label="Previous">&#8249;</button>
+            <button id="next" aria-label="Next">&#8250;</button>
+          </div>
+        </div>
+
+        <div class="a-years" id="a-years"></div>
+
+        <div class="a-stage">
+          <div class="cell car-front" id="car-front"></div>
+          <div class="cell text-top"><h2 id="a-name"></h2><p id="a-p1"></p></div>
+          <div class="cell text-bottom"><p id="a-p2"></p></div>
+          <div class="cell car-rear" id="car-rear"></div>
+          <span class="divider"></span>
+        </div>
+      </div>
+
+      <div class="intro">
+        <p><b>BART stands for Bay Area Rapid Transit.</b> Since 1972 it has tied together San Francisco, the East Bay, the Peninsula and the South Bay, so you can go from the Mission to the Oakland hills to San José without touching a freeway.</p>
+      </div>
+
+      <div class="numbers">
+        <div><strong>50</strong><span>stations</span></div>
+        <div><strong>131</strong><span>miles of track</span></div>
+        <div><strong>1974</strong><span>Transbay Tube opens under the Bay</span></div>
+        <div><strong>5 ft 6 in</strong><span>track gauge, wider than standard rail</span></div>
+      </div>
+
+      <div class="about-foot">
+        <a href="#map" class="cta">Explore the map &rarr;</a>
+        <p>BART Revamp is a fan project and is not affiliated with BART. Check bart.gov for current service.</p>
+      </div>
+    </section>
+  </main>
 
   <script src="data/bart.js"></script>
   <script src="data/station-info.js"></script>
+  <script src="trains.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

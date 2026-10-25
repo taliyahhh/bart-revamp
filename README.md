@@ -4,9 +4,12 @@ An interactive take on the BART system map that keeps the look of the official m
 
 ## Features
 
-- **Day / Evening service**: click the Daytime or Evening legend box to switch. Daytime shows all 5 lines plus the OAK Airport connector; evening (9pm to midnight) shows Orange, Yellow (to Millbrae) and Blue. The map opens in evening mode automatically after 9pm.
-- **Line spotlight**: click a line on the map or in the legend to fade everything else.
-- **Trip highlight**: pick two stations in Plan a Trip (or click them on the map) to see your route, each leg, and where to transfer. It prefers fewer transfers and favors the timed transfers at MacArthur and 19th St.
+- **Map tab**: the system map in the style of the official BART map. Drag to pan, pinch or scroll to zoom, and use the +/- buttons on any device.
+- **Bottom bar**: switch between Daytime and Evening service and tap a line chip to spotlight that line. At night, Red and Green show as "off tonight."
+- **Station tab**: tap a station for its lines, live departures from the BART API, connections and nearby spots.
+- **Alerts tab**: live delay advisories, elevator outages and service notes. An orange dot appears when there's a delay.
+- **About BART tab**: an editorial page on what BART stands for, the legacy fleet versus the Fleet of the Future (illustrated trains), and key numbers.
+- **Responsive**: side panel on desktop, floating sheet on tablet, bottom sheet on phones.
 
 ## Run it
 
@@ -15,8 +18,10 @@ No build step. Open `index.html`, or run `npx serve .`
 ## Structure
 
 ```
-data/bart.js   stations (x/y on a 1183 x 1008 canvas), lines, day/evening service
-app.js         drawing, legend, spotlight, trip planner
+data/bart.js          stations (x/y on a 1183 x 1008 canvas), lines, day/evening service
+data/station-info.js  BART API codes, connections, nearby spots
+trains.js             train illustrations + About page carousel
+app.js                map, pan/zoom, bottom bar, panel tabs, live data
 style.css      map styling
 index.html
 ```
