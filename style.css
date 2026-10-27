@@ -339,23 +339,21 @@ body[data-view="about"] .topnav, body[data-view="sources"] .topnav { background:
 .intro-bart {
   position: absolute; left: 50%; top: 50%; translate: -50% -50%;
   font-family: "Inter", "Helvetica Neue", sans-serif; font-weight: 400; font-size: clamp(72px, 15vw, 210px);
-  line-height: 1; letter-spacing: .04em; color: var(--accent);
+  line-height: normal; letter-spacing: .02em; color: var(--accent); will-change: transform, opacity;
   opacity: 0; transform: scale(.9); transform-origin: center; pointer-events: none;
   transition: opacity .6s ease, transform .6s cubic-bezier(.2, .8, .2, 1);
   text-shadow: 0 2px 30px var(--veil-strong);
 }
 .fog-intro.reveal .intro-bart { opacity: 1; transform: scale(1); }
-.intro-bart.fly { transition: transform .8s cubic-bezier(.65, 0, .25, 1); text-shadow: none; }
+.intro-bart.fly { transition: none; text-shadow: none; }
 /* Keep the logo's BART hidden until the flying BART lands in it */
-body.intro-on .brand span { opacity: 0; }
+body.intro-on .brand span { visibility: hidden; }
 
 .intro-skip {
   position: absolute; right: 18px; bottom: calc(18px + env(safe-area-inset-bottom));
   border: 1px solid rgba(35,31,32,.25); background: var(--veil); border-radius: 99px;
   padding: 6px 14px; font-size: 12px; color: var(--ink);
 }
-.brand-pop span { animation: brandpop .5s ease; }
-@keyframes brandpop { 0% { opacity: 0; } 100% { opacity: 1; } }
 
 /* ---------- Site footer ---------- */
 .site-footer { background: var(--paper-2); border-top: 1px solid var(--rule-soft); margin-top: 56px; }

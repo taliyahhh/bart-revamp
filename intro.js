@@ -36,21 +36,33 @@
   const at = (ms, fn) => timers.push(setTimeout(fn, ms));
   const bart = ov.querySelector(".intro-bart");
 
+  // BART shrinks into the logo. Scale comes from the real text widths (both use the same
+  // letter-spacing), so it lands exactly on top of the logo's BART and swaps in invisibly.
+  let flight = null, done = false;
   function flyToLogo() {
     const target = document.querySelector(".brand span");
-    if (!target) return;
+    if (!target) return finish();
+    bart.getAnimations().forEach(a => a.finish()); // settle the reveal first
     const from = bart.getBoundingClientRect(), to = target.getBoundingClientRect();
-    const scale = to.height / from.height * 1.25;
+    const scale = to.width / from.width;
     const dx = (to.left + to.width / 2) - (from.left + from.width / 2);
     const dy = (to.top + to.height / 2) - (from.top + from.height / 2);
-    bart.style.transform = `translate(${dx}px, ${dy}px) scale(${scale})`;
     bart.classList.add("fly");
+    flight = bart.animate(
+      [{ transform: "translate(0, 0) scale(1)" }, { transform: `translate(${dx}px, ${dy}px) scale(${scale})` }],
+      { duration: 1100, easing: "cubic-bezier(.22, 1, .36, 1)", fill: "forwards" }
+    );
+    flight.finished.then(finish, () => {});
   }
 
   function finish() {
+    if (done) return;
+    done = true;
     timers.forEach(clearTimeout);
+    // Swap in the real logo in the same frame the flying copy disappears.
     document.body.classList.remove("intro-on");
-    document.querySelector(".brand")?.classList.add("brand-pop");
+    bart.style.visibility = "hidden";
+    flight?.cancel();
     ov.classList.add("done");
     setTimeout(() => ov.remove(), 500);
     removeEventListener("keydown", finish);
@@ -60,8 +72,7 @@
   at(50, () => ov.classList.add("show"));       // words fade in under the fog
   at(1700, () => ov.classList.add("part"));     // fog splits, words drift away with it
   at(2500, () => ov.classList.add("reveal"));   // BART appears
-  at(3500, flyToLogo);                          // BART flies into the logo
-  at(4300, finish);
+  at(3400, flyToLogo);                          // BART flies into the logo, then finish() runs when it lands
 
   ov.addEventListener("click", finish);
   addEventListener("keydown", finish);
