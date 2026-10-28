@@ -65,7 +65,7 @@ function drawBackground() {
   el("path", { class: "rail", d: "M340,500 C350,600 380,700 430,780 C500,860 600,900 720,915" });
   el("path", { class: "rail", d: "M560,40 L470,60 C480,200 470,330 478,420 C560,520 680,640 760,700 L900,780" });
   for (const [t, x, y] of [["SAN FRANCISCO", 145, 388], ["OAKLAND", 586, 398], ["EAST BAY", 683, 276], ["PENINSULA", 361, 855], ["SAN JOSÉ", 980, 898]])
-    el("text", { class: "region", x, y }).textContent = t;
+    el("text", { class: "region", x, y, style: `transform-origin:${x}px ${y}px` }).textContent = t;
 }
 
 let layer, hitLayer;
@@ -109,12 +109,15 @@ function drawNetwork() {
     else if (s.label === "TL") { x = maxX + 4; anchor = "end"; y0 = minY - 6 - (rows.length - 1) * lh; }
     else if (s.label === "T") { x = cx; anchor = "middle"; y0 = minY - 6 - (rows.length - 1) * lh; }
     else { x = cx; anchor = "middle"; y0 = maxY + 14; }
+    // Labels shrink back toward their station as you zoom in, so they stay readable without crowding.
+    const [ox, oy] = { L: [minX, cy], R: [maxX, cy], TL: [maxX, minY], T: [cx, minY] }[s.label] || [cx, maxY];
+    const lbl = el("g", { class: "lbl", style: `transform-origin:${ox.toFixed(1)}px ${oy.toFixed(1)}px` }, g);
     rows.forEach((r, i) => {
-      el("text", { x, y: y0 + i * lh, "text-anchor": anchor, class: s.bold ? "bold" : "" }, g).textContent = r;
+      el("text", { x, y: y0 + i * lh, "text-anchor": anchor, class: s.bold ? "bold" : "" }, lbl).textContent = r;
     });
     if (s.note && !s.panelOnly) {
-      const nb = g.querySelector("text").getBBox();
-      el("text", { x: nb.x + nb.width + 6, y: y0, class: "note" }, g).textContent = s.note.toUpperCase();
+      const nb = lbl.querySelector("text").getBBox();
+      el("text", { x: nb.x + nb.width + 6, y: y0, class: "note" }, lbl).textContent = s.note.toUpperCase();
     }
     hit.addEventListener("click", () => {
       const pick = selected === id ? null : id;
@@ -148,6 +151,18 @@ function setVB(next) {
   const y = h >= BASE.h ? BASE.y + (BASE.h - h) / 2 : Math.min(BASE.y + BASE.h - h, Math.max(BASE.y, next.y));
   vb = { x, y, w, h };
   svg.setAttribute("viewBox", `${x.toFixed(1)} ${y.toFixed(1)} ${w.toFixed(1)} ${h.toFixed(1)}`);
+  applyZoomSizing();
+}
+
+// As you zoom in, everything still grows, just more gently than the map itself:
+// lines get thinner so parallel lines separate, trains shrink to fit their own line,
+// and labels grow a little instead of a lot. Zoomed all the way out, sizes are unchanged.
+function applyZoomSizing() {
+  const z = Math.max(1, fitWidth() / vb.w); // 1 = the starting view for this screen
+  const st = svg.style;
+  st.setProperty("--lk", Math.pow(z, -0.45).toFixed(3)); // lines, station markers, tap targets
+  st.setProperty("--ts", Math.pow(z, -0.62).toFixed(3)); // mini trains
+  st.setProperty("--ls", Math.pow(z, -0.6).toFixed(3));  // station and area labels
 }
 function toSvg(cx, cy) {
   const pt = svg.createSVGPoint();
@@ -265,10 +280,14 @@ addEventListener("keydown", e => {
 });
 
 // Starting view: the whole map on wide screens; on tall phones, fill the height so it isn't tiny.
+function fitWidth() {
+  const a = aspect();
+  return a < 0.9 ? Math.max(BASE.h * a, Math.min(660, maxW())) : Math.min(maxW(), BASE.w);
+}
 function fitView(smooth) {
   const a = aspect();
   const portrait = a < 0.9;
-  const w = portrait ? Math.max(BASE.h * a, Math.min(660, maxW())) : maxW();
+  const w = portrait ? fitWidth() : maxW();
   const target = { x: BASE.x + (BASE.w - w) / 2 + (portrait ? 10 : 0), y: BASE.y + (BASE.h - w / a) / 2, w };
   smooth ? animateTo(target) : setVB(target);
 }

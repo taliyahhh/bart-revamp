@@ -124,12 +124,13 @@ function renderTrains() {
     const pts = ptsCache[t.line] ||= offsetPoints(line);
     const p = pointAlong(pts, t.iP, t.iS, t.frac);
     const g = el("g", { class: "train" + (focusedLine === t.line ? " hl" : ""), transform: `translate(${p.x.toFixed(1)},${p.y.toFixed(1)}) rotate(${p.angle.toFixed(1)})` }, trainLayer);
-    // Bullet-nosed mini train; the nose points the way it's heading.
+    // Bullet-nosed mini train; the nose points the way it's heading. Inner group scales with zoom.
+    const gb = el("g", { class: "tb" }, g);
     const body = "M-13,-5.5 L6,-5.5 Q13,-5.5 14,0 Q13,5.5 6,5.5 L-13,5.5 Q-15,5.5 -15,3.5 L-15,-3.5 Q-15,-5.5 -13,-5.5 Z";
-    el("path", { d: body, fill: "none", stroke: "#fff", "stroke-width": 4, "stroke-linejoin": "round" }, g);
-    el("path", { d: body, fill: line.color, stroke: "#231f20", "stroke-width": 1.5, "stroke-linejoin": "round" }, g);
-    for (const x of [-11, -5, 1]) el("rect", { x, y: -2.5, width: 4, height: 5, rx: 1, fill: "#231f20", opacity: .75 }, g);
-    el("path", { d: "M8,-3 Q11.5,-2.5 12,0 Q11.5,2.5 8,3 Z", fill: "#231f20", opacity: .8 }, g);
+    el("path", { d: body, fill: "none", stroke: "#fff", "stroke-width": 4, "stroke-linejoin": "round" }, gb);
+    el("path", { d: body, fill: line.color, stroke: "#231f20", "stroke-width": 1.5, "stroke-linejoin": "round" }, gb);
+    for (const x of [-11, -5, 1]) el("rect", { x, y: -2.5, width: 4, height: 5, rx: 1, fill: "#231f20", opacity: .75 }, gb);
+    el("path", { d: "M8,-3 Q11.5,-2.5 12,0 Q11.5,2.5 8,3 Z", fill: "#231f20", opacity: .8 }, gb);
     const next = STATIONS[line.path[t.iS]];
     const when = live.source === "live" ? (t.m - elapsed <= 0.5 ? "arriving now" : `in ${Math.ceil(t.m - elapsed)} min`) : "";
     el("title", {}, g).textContent = `${line.name} to ${t.dest}. Next stop ${next.short || next.name}${when ? ", " + when : ""}${t.cars ? ` (${t.cars} cars)` : ""}`;

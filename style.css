@@ -74,12 +74,14 @@ body[data-view="about"] .topnav, body[data-view="sources"] .topnav { background:
 /* map layers */
 .water { fill: var(--water); }
 .rail { fill: none; stroke: var(--rail); stroke-width: 2.5; }
-.region { font-weight: 800; fill: var(--region); font-size: 21px; letter-spacing: -0.01em; pointer-events: none; }
-.line-path { fill: none; stroke-width: 6.5; stroke-linecap: round; stroke-linejoin: round; cursor: pointer; transition: opacity .25s; }
-.station .halo { stroke: var(--halo); stroke-linecap: round; stroke-width: 11; }
-.station .fill { stroke: #fff; stroke-linecap: round; stroke-width: 7; }
-.hit { stroke: transparent; stroke-width: 26; stroke-linecap: round; cursor: pointer; }
-.station.selected .halo { stroke: var(--accent); stroke-width: 15; }
+.region { font-weight: 800; fill: var(--region); font-size: 21px; letter-spacing: -0.01em; pointer-events: none; transform: scale(var(--ls, 1)); }
+.station .lbl { transform: scale(var(--ls, 1)); }
+.train .tb { transform: scale(var(--ts, 1)); }
+.line-path { fill: none; stroke-width: calc(6.5px * var(--lk, 1)); stroke-linecap: round; stroke-linejoin: round; cursor: pointer; transition: opacity .25s; }
+.station .halo { stroke: var(--halo); stroke-linecap: round; stroke-width: calc(11px * var(--lk, 1)); }
+.station .fill { stroke: #fff; stroke-linecap: round; stroke-width: calc(7px * var(--lk, 1)); }
+.hit { stroke: transparent; stroke-width: calc(26px * var(--lk, 1)); stroke-linecap: round; cursor: pointer; }
+.station.selected .halo { stroke: var(--accent); stroke-width: calc(15px * var(--lk, 1)); }
 .station { cursor: pointer; transition: opacity .25s; }
 .station text { font-size: 14.5px; fill: var(--ink); }
 .station text.bold { font-weight: 800; font-size: 17px; }
@@ -432,7 +434,7 @@ body, .topnav, .sheet, .zoom, .zoom button, .bottombar, .site-footer, .live-pill
 .water, .rail, .region, .station text, .station .halo { transition: fill .8s ease, stroke .8s ease; }
 
 /* Bigger tap targets on touch screens */
-@media (pointer: coarse) { .hit { stroke-width: 36; } .line-path { stroke-width: 7.5; } }
+@media (pointer: coarse) { .hit { stroke-width: calc(36px * var(--lk, 1)); } .line-path { stroke-width: calc(7.5px * var(--lk, 1)); } }
 
 /* Night intro fog: soft moonlit haze instead of white clouds */
 .fog-intro.night .intro-veil { background: rgba(12, 16, 24, .55); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
