@@ -3,6 +3,15 @@
 // bold: terminal stations. wp: true = a bend in the track, not a station.
 // g = trunk group, used to decide how parallel lines are spaced.
 
+// BART runs on Bay Area time, so service hours use Pacific time no matter where the viewer is.
+window.bayClock = () => {
+  const p = Object.fromEntries(new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Los_Angeles", hour12: false, weekday: "short",
+    hour: "numeric", minute: "numeric", second: "numeric"
+  }).formatToParts(new Date()).map(x => [x.type, x.value]));
+  return { h: +p.hour % 24, m: +p.minute, s: +p.second, day: p.weekday };
+};
+
 window.STATIONS = {
   // Richmond trunk
   richmond:         { name: "Richmond", x: 340, y: 120, label: "L", bold: true, g: "EB" },
@@ -59,7 +68,7 @@ window.STATIONS = {
   fruitvale:        { name: "Fruitvale", x: 540, y: 447, label: "R", g: "SOUTH" },
   coliseum:         { name: "Coliseum", x: 570, y: 477, label: "R", g: "SOUTH" },
   sanleandro:       { name: "San Leandro", x: 597, y: 504, label: "R", g: "SOUTH" },
-  bayfair:          { name: "Bay Fair", x: 627, y: 534, label: "R", g: "SOUTH" },
+  bayfair:          { name: "Bay Fair", x: 627, y: 534, label: "R", g: "SOUTH", note: "Timed transfer (Blue and Orange)", panelOnly: true },
 
   // OAK connector
   w_oak:            { x: 572, y: 520, wp: true, g: "OAK" },
@@ -92,7 +101,7 @@ const YB = ["antioch","pittsburgcenter","pittsburgbp","northconcord","w_nc","con
 // slots: sideways offset (px) per trunk group so parallel lines sit side by side.
 window.LINES = {
   red:    { name: "Red Line", letter: "R", color: "#ED1C24", ends: "Richmond - Millbrae",
-            path: [...EB, "w_jn", ...SF, ...PEN, "millbrae"],
+            path: [...EB, "w_jn", ...SF, ...PEN, "sfo", "millbrae"],
             slots: { EB: 3.5, SF: 10.5, PEN: 3.5 } },
   orange: { name: "Orange Line", letter: "O", color: "#F7941D", ends: "Richmond - Berryessa/North San José",
             path: [...EB, "w_s", ...SOUTH, ...FREM],

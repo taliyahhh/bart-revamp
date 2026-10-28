@@ -63,8 +63,8 @@ async function loadLive() {
 // ---------- Estimated fallback (timetable model) ----------
 function estimatedItems() {
   const out = [];
-  const now = new Date();
-  const clock = now.getHours() * 60 + now.getMinutes() + now.getSeconds() / 60;
+  const t = bayClock();
+  const clock = t.h * 60 + t.m + t.s / 60;
   for (const line of activeLines()) {
     if (line.id === "oak") continue;
     for (const dir of [1, -1]) {

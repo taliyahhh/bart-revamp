@@ -112,7 +112,7 @@ function drawNetwork() {
     rows.forEach((r, i) => {
       el("text", { x, y: y0 + i * lh, "text-anchor": anchor, class: s.bold ? "bold" : "" }, g).textContent = r;
     });
-    if (s.note) {
+    if (s.note && !s.panelOnly) {
       const nb = g.querySelector("text").getBBox();
       el("text", { x: nb.x + nb.width + 6, y: y0, class: "note" }, g).textContent = s.note.toUpperCase();
     }
@@ -277,13 +277,13 @@ function fitView(smooth) {
 function renderBar() {
   document.querySelectorAll(".toggle button").forEach(b => b.classList.toggle("active", b.dataset.mode === mode));
 
-  const now = new Date(), h = now.getHours();
+  const { h, m } = bayClock();
   const live = h >= 21 ? "night" : h >= 5 ? "day" : null;
   // Flip to evening (and dark mode) on its own when 9pm hits, unless the rider picked a mode.
   if (!manualMode && live && live !== mode && typeof applyTheme === "function") { setMode(live); return; }
   let text;
   if (live === "day") {
-    const mins = (21 - h) * 60 - now.getMinutes();
+    const mins = (21 - h) * 60 - m;
     text = `Evening service in ${Math.floor(mins / 60)}h ${mins % 60}m`;
   } else if (live === "night") text = "Last trains around midnight";
   else text = "No service right now, trains resume in the morning";
@@ -397,10 +397,15 @@ const getBsa = cmd => fetch(`${API}/bsa.aspx?cmd=${cmd}&key=${BART_KEY}&json=y`)
 async function alertsPanel() {
   const local = [];
   if (mode === "night") {
-    local.push({ cls: "warn", text: "After 9pm, change trains at SFO for Millbrae service." });
-    local.push({ cls: "warn", text: "No Red or Green Line in the evening. Use Orange or Yellow toward Richmond and SF, Orange or Blue toward the South Bay." });
+    local.push({ cls: "warn", text: "From 9pm to midnight, Yellow Line trains end at SFO. For Millbrae, cross the platform at SFO to the Millbrae shuttle." });
+    local.push({ cls: "warn", text: "No Red or Green Line after 9pm. Richmond to SF: ride Orange and switch to Yellow at MacArthur or 19th St. Daly City to Fremont or San José: ride Blue and switch to Orange at Bay Fair." });
+    if (["Sun", "Mon", "Tue", "Wed", "Thu"].includes(bayClock().day))
+      local.push({ cls: "warn", text: "Sunday through Thursday nights after 9pm, train control work between Daly City and Millbrae can slow trains. Allow extra time." });
   }
-  local.push({ text: "MacArthur and 19th St/Oakland have timed transfers: trains wait for each other so you can switch lines across the platform." });
+  local.push({ text: mode === "night"
+    ? "Blue trains end at Daly City. Going to SFO or Millbrae? Switch to a Yellow train at Balboa Park, on the same platform."
+    : "Blue and Green trains end at Daly City. Going to SFO or Millbrae? Switch to a Red or Yellow train at Balboa Park, on the same platform." });
+  local.push({ text: "Timed transfers: trains meet across the platform at MacArthur and 19th St/Oakland, and at Bay Fair between Blue and Orange, so you can switch lines without a long wait." });
 
   panel.innerHTML = `<h2>Service alerts</h2><p class="sub">Systemwide, updated live</p>
     <h3>Right now</h3><div id="bsa"><p class="sub">Loading...</p></div>
@@ -460,8 +465,8 @@ function setMode(m) {
 }
 document.querySelectorAll(".toggle button").forEach(b => b.onclick = () => { manualMode = true; setMode(b.dataset.mode); });
 
-const hour = new Date().getHours();
-mode = hour >= 21 || hour < 4 ? "night" : "day";
+const hour = bayClock().h;
+mode = hour >= 21 || hour < 5 ? "night" : "day";
 applyTheme();
 if (isSmall()) sheet.classList.add("collapsed");
 route();
